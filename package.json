@@ -23,12 +23,13 @@
     "caddy:regenerate": "bun run scripts/regenerate-caddy.ts",
     "catalog": "bun run scripts/catalog.ts",
     "plan": "env -u npm_execpath -u npm_config_user_agent bun ./node_modules/alchemy/bin/cli.js plan --config alchemy.run.ts --stage live",
-    "deploy": "env -u npm_execpath -u npm_config_user_agent bun ./node_modules/alchemy/bin/cli.js deploy --config alchemy.run.ts --stage live"
+    "deploy": "env -u npm_execpath -u npm_config_user_agent bun ./node_modules/alchemy/bin/cli.js deploy --config alchemy.run.ts --stage live",
+    "prepare": "bun node_modules/@homeflare/config/bin/hooks.ts activate"
   },
   "devDependencies": {
     "@effect/platform-node": "4.0.0-rc.115",
     "@homeflare/alchemy": "0.24.0",
-    "@homeflare/config": "0.10.0",
+    "@homeflare/config": "0.11.0",
     "@types/bun": "1.4.2",
     "alchemy": "2.0.0-beta.79",
     "effect": "4.0.0-rc.115",
