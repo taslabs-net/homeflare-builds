@@ -1,0 +1,15 @@
+{
+  // House baseline: @homeflare/config/tsconfig.app.json — an Alchemy app with Bun scripts,
+  // like homeflare-landscape; nothing here publishes types.
+  "extends": "@homeflare/config/tsconfig.app.json",
+  "compilerOptions": {
+    "types": ["bun"]
+  },
+  "include": [
+    "alchemy.run.ts",
+    "repo-shape.ts",
+    "builds/**/*.ts",
+    "scripts/**/*.ts",
+    "tests/**/*.ts"
+  ]
+}

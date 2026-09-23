@@ -1,0 +1,10 @@
+node_modules/
+.alchemy/
+# Build output: archives, checksums and notes land here, and only CI uploads them.
+dist/
+.DS_Store
+.env
+.env.*
+*.tsbuildinfo
+# Local Go toolchain and scratch (scripts/lib/go.ts installs the pinned Go here outside CI).
+.cache/
