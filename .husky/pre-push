@@ -1,0 +1,15 @@
+# HomeFlare shared git hook. The behaviour lives in @homeflare/config, not in this file,
+# and the same bytes are installed as .husky/pre-commit and .husky/pre-push — the hook
+# name comes from $0, and git's arguments and stdin pass straight through.
+#
+# ⚠️ A hook is a local convenience, not a gate: it is skippable with --no-verify, and a
+#   worktree runs it only once `bun install` has run there. The required checks on main
+#   stay the gate.
+#
+# Regenerate this file with: bun node_modules/@homeflare/config/bin/hooks.ts install
+hook="node_modules/@homeflare/config/bin/hooks.ts"
+if [ ! -f "$hook" ]; then
+  echo "homeflare hooks: $hook is missing — run 'bun install' in this worktree; skipping" >&2
+  exit 0
+fi
+exec bun "$hook" "$(basename "$0")" "$@"

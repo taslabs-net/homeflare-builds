@@ -7,7 +7,7 @@
       "devDependencies": {
         "@effect/platform-node": "4.0.0-rc.115",
         "@homeflare/alchemy": "0.24.0",
-        "@homeflare/config": "0.10.0",
+        "@homeflare/config": "0.11.0",
         "@types/bun": "1.4.2",
         "alchemy": "2.0.0-beta.79",
         "effect": "4.0.0-rc.115",
@@ -132,7 +132,7 @@
 
     "@homeflare/alchemy": ["@homeflare/alchemy@0.24.0", "", { "peerDependencies": { "@distilled.cloud/cloudflare": "1.0.0-rc.12", "@effect/platform-node": "4.0.0-rc.115", "@effect/sql-pg": "4.0.0-rc.115", "alchemy": "2.0.0-beta.79", "cloudflare": ">=4.5.0", "effect": "4.0.0-rc.115", "mime": "4.1.0" }, "bin": { "hf-adopt-verify": "dist/verify/cli.js" } }, "sha512-esT3IZXSYA4PnUOhpZNQkiyJDkmkEiKkdmNA6YMXM8Z9VB8enGc7WYs6rGiBuxljLld3WPpJmDbD4HT/YQPNvQ=="],
 
-    "@homeflare/config": ["@homeflare/config@0.10.0", "", {}, "sha512-d5xrjlcL+A8XxHlV/G3MKsqYiPHGVlqEW3gHNupBiUFRK80vhTD4/hLh3fzIAJ8JN1Qq954fdUfCOUjjNzkcuw=="],
+    "@homeflare/config": ["@homeflare/config@0.11.0", "", {}, "sha512-tdF5bKuvraDQlIy0lF128EXyCRzDzozKJ7zIH7qdqz9zJM+VxzRHUQsLdf6En7kJI7XFv1LlxdxqPfHZVTkRgg=="],
 
     "@hono/node-server": ["@hono/node-server@1.19.9", "", { "peerDependencies": { "hono": "^4" } }, "sha512-vHL6w3ecZsky+8P5MD+eFfaGTyCeOHUIFYMGpQGbrBTSmNNoxv0if69rEZ5giu36weC5saFuznL411gRX7bJDw=="],
 
