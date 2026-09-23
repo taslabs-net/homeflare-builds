@@ -2,14 +2,14 @@
 import { expect, test } from 'bun:test';
 import { caddy } from '../builds/caddy/build.ts';
 import { cloudflareExporter } from '../builds/cloudflare-exporter/build.ts';
-import { buildInfoProblems, parseBuildInfo } from '../scripts/lib/buildinfo.ts';
+import { buildInfoProblems, linkFlagProblems, parseBuildInfo } from '../scripts/lib/buildinfo.ts';
 
 const settings = (tags: string) =>
   [
     '\tbuild\t-buildmode=exe',
     '\tbuild\t-compiler=gc',
     '\tbuild\t-buildvcs=false',
-    '\tbuild\t-ldflags="-s -w -buildid="',
+    // ⚠️ no -ldflags line: go omits it under -trimpath (see buildinfo.ts)
     ...(tags === '' ? [] : [`\tbuild\t-tags=${tags}`]),
     '\tbuild\t-trimpath=true',
     '\tbuild\tCGO_ENABLED=0',
@@ -58,4 +58,13 @@ test('an upstream clone must record the pinned commit, unmodified', () => {
   expect(buildInfoProblems(cloudflareExporter, good)).toEqual([]);
   const dirty = parseBuildInfo(vcs('0'.repeat(40), 'true'));
   expect(buildInfoProblems(cloudflareExporter, dirty)).toHaveLength(2);
+});
+
+test('the link flags are judged by their effect: no build ID, no defined symbols', () => {
+  const stripped = '         U ___error\n         U __exit\n';
+  expect(linkFlagProblems(caddy, '', stripped)).toEqual([]);
+  expect(linkFlagProblems(caddy, 'Zfo/hmb/t_G/sZI\n', '100078930 R $f64.3eb\n')).toEqual([
+    'build ID is Zfo/hmb/t_G/sZI, expected none (-buildid=)',
+    '1 symbols present, expected none (-s)',
+  ]);
 });

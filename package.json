@@ -21,6 +21,7 @@
     "builds:verify": "bun run scripts/verify.ts",
     "builds:build": "bun run scripts/build.ts",
     "caddy:regenerate": "bun run scripts/regenerate-caddy.ts",
+    "catalog": "bun run scripts/catalog.ts",
     "plan": "env -u npm_execpath -u npm_config_user_agent bun ./node_modules/alchemy/bin/cli.js plan --config alchemy.run.ts --stage live",
     "deploy": "env -u npm_execpath -u npm_config_user_agent bun ./node_modules/alchemy/bin/cli.js deploy --config alchemy.run.ts --stage live"
   },

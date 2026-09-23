@@ -53,9 +53,10 @@ export const buildInfoProblems = (build: Build, info: BuildInfo): string[] => {
   want('GOOS', info.settings.get('GOOS'), TARGET.goos);
   want('GOARCH', info.settings.get('GOARCH'), TARGET.goarch);
   want('-trimpath', info.settings.get('-trimpath'), 'true');
-  // ★ go quotes a multi-word -ldflags value in build info: `-ldflags="-s -w -buildid="`.
-  const ldflags = build.flags.ldflags.join(' ');
-  want('-ldflags', info.settings.get('-ldflags'), ldflags.includes(' ') ? `"${ldflags}"` : ldflags);
+  // ⚠️ NO `-ldflags` CHECK HERE: with -trimpath, go does not record -ldflags in build info at
+  //   all (measured with go1.26.8: `-trimpath -ldflags=…` → no line; without -trimpath →
+  //   `-ldflags="-s -w -buildid="`). The first release run failed on exactly this. Their
+  //   EFFECT is checked instead, in `linkFlagProblems`.
   if (build.flags.tags.length > 0)
     want('-tags', info.settings.get('-tags'), build.flags.tags.join(','));
   if (build.kind === 'xcaddy') {
@@ -70,11 +71,33 @@ export const buildInfoProblems = (build: Build, info: BuildInfo): string[] => {
   return problems;
 };
 
+/**
+ * What the link flags did, read off the binary since build info cannot say (see above):
+ * `-buildid=` leaves `go tool buildid` empty, and `-s` leaves `go tool nm` no defined symbol —
+ * only the `U` imports from libSystem remain (measured on a go1.26.8 darwin/arm64 build).
+ */
+export const linkFlagProblems = (build: Build, buildid: string, nm: string): string[] => {
+  const problems: string[] = [];
+  if (build.flags.ldflags.includes('-buildid=') && buildid.trim() !== '') {
+    problems.push(`build ID is ${buildid.trim()}, expected none (-buildid=)`);
+  }
+  const defined = nm.split('\n').filter((line) => line.trim() !== '' && !/^\s+U /.test(line));
+  if (build.flags.ldflags.includes('-s') && defined.length > 0) {
+    problems.push(`${String(defined.length)} symbols present, expected none (-s)`);
+  }
+  return problems;
+};
+
 /** Read `binary`'s build info with the pinned Go and refuse one that disagrees. */
 export const verifyBuildInfo = async (go: Go, build: Build, binary: string): Promise<BuildInfo> => {
   const { stdout } = await run([go.bin, 'version', '-m', binary], { echo: false, env: goEnv(go) });
   const info = parseBuildInfo(stdout);
-  const problems = buildInfoProblems(build, info);
+  const tool = (name: string) =>
+    run([go.bin, 'tool', name, binary], { echo: false, env: goEnv(go) }).then((r) => r.stdout);
+  const problems = [
+    ...buildInfoProblems(build, info),
+    ...linkFlagProblems(build, await tool('buildid'), await tool('nm')),
+  ];
   if (problems.length > 0) throw new Error(`${build.name} build info:\n  ${problems.join('\n  ')}`);
   console.log(`${build.name}: build info matches (${String(info.deps.size)} modules)`);
   return info;
