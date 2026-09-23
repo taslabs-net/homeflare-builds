@@ -60,7 +60,10 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: 1.4.0
-      - run: bun install --frozen-lockfile
+      # ★ NO `bun install` IN ANY JOB HERE: the release scripts import only this repository's
+      #   own files and Bun/Node built-ins (no npm package at run time), so installing the
+      #   dependency tree would only put third-party code next to a write token and an OIDC
+      #   token for nothing. The rendered `ci` workflow installs it to lint and typecheck.
       - id: plan
         run: bun run scripts/plan.ts
         env:
@@ -86,9 +89,11 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: 1.4.0
-      - run: bun install --frozen-lockfile
+      # ⛔ The matrix value reaches the shell through env, never interpolated into the script.
       - name: Build, check build info, smoke-test, pack
-        run: bun run builds:build "${{ matrix.build }}" --out dist
+        env:
+          BUILD: ${{ matrix.build }}
+        run: bun run builds:build "${BUILD}" --out dist
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: build-${{ matrix.build }}
@@ -117,14 +122,15 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: 1.4.0
-      - run: bun install --frozen-lockfile
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: build-${{ matrix.build }}
           path: dist/${{ matrix.build }}
       - name: Re-verify the files before anything is signed
         id: dist
-        run: bun run scripts/check-dist.ts "${{ matrix.build }}" "dist/${{ matrix.build }}"
+        env:
+          BUILD: ${{ matrix.build }}
+        run: bun run scripts/check-dist.ts "${BUILD}" "dist/${BUILD}"
       # ★ actions/attest, not attest-build-provenance: since v4 the latter is a wrapper whose
       #   own release notes say new workflows should use actions/attest. With no predicate
       #   input it writes the same SLSA build provenance. `subject-checksums` makes EVERY line

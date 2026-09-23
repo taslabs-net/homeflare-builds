@@ -49,7 +49,7 @@ gh attestation verify ./caddy --repo taslabs-net/homeflare-builds \
 
 Measured on PR 1 (2026-09-22): the Linux cross-build in the `go builds` job and the native
 macOS build in `release` produced the **same bytes** — `caddy` `2e350f6f…fbe38` and its archive
-`f1f6922c…5c42b` from both runners. Nothing in the build depends on the host: Go with cgo off,
+`f1f6922c…21c42b` from both runners. Nothing in the build depends on the host: Go with cgo off,
 `-trimpath`, no build ID, no VCS stamp for the generated module, and an archive written byte by
 byte with fixed owner and the source's date. So anyone can check a release without trusting
 this repository's runner at all:
