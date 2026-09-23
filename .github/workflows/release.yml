@@ -1,0 +1,175 @@
+# Build every darwin/arm64 binary on a GitHub-hosted Mac, and publish the ones not yet released.
+#
+# ⛔ NOT RENDERED BY @homeflare/config (it renders no release workflow yet). This file is
+#    this repository's own, and repo-shape.ts says so.
+# ⛔ GITHUB-HOSTED RUNNERS ONLY. This repository is PUBLIC; a self-hosted runner would run a
+#    fork's pull request on the machine behind it. The mini's daemon refuses public
+#    repositories too (homeflare-mini src/ci-runner/start.ts) — two locks, not one.
+# ⛔ EVERY ACTION IS FIRST-PARTY OR THE VENDOR'S OWN, AND PINNED TO A COMMIT, NOT A TAG. The
+#    rendered workflows pin major tags; this is the one workflow holding `contents: write` and
+#    an OIDC token that signs attestations, so a moved tag here would sign someone else's code.
+#    Dependabot (github-actions ecosystem) proposes the new SHA and comment together.
+#
+# How a release happens: a pull request changes a manifest (builds/<name>/build.ts), usually by
+# bumping `revision` or a version; `plan` on the pull request builds every manifest natively and
+# publishes nothing; after the merge, `plan` on main finds the tag with no release, and
+# `publish` releases exactly the files `build` produced, after re-verifying them.
+name: release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - builds/**
+      - toolchain/**
+      - scripts/**
+      - package.json
+      - bun.lock
+      - .github/workflows/release.yml
+  # ★ The same list, spelled out twice: YAML anchors would need an actionlint that reads them.
+  pull_request:
+    paths:
+      - builds/**
+      - toolchain/**
+      - scripts/**
+      - package.json
+      - bun.lock
+      - .github/workflows/release.yml
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  # ⛔ Never cancel a publish half-way: a release is created as a draft, then published.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  plan:
+    name: plan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      builds: ${{ steps.plan.outputs.builds }}
+      count: ${{ steps.plan.outputs.count }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.4.0
+      # ★ NO `bun install` IN ANY JOB HERE: the release scripts import only this repository's
+      #   own files and Bun/Node built-ins (no npm package at run time), so installing the
+      #   dependency tree would only put third-party code next to a write token and an OIDC
+      #   token for nothing. The rendered `ci` workflow installs it to lint and typecheck.
+      - id: plan
+        run: bun run scripts/plan.ts
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  build:
+    name: build ${{ matrix.build }}
+    needs: plan
+    if: needs.plan.outputs.count != '0'
+    # ★ macos-26 is arm64 (GitHub's runner table, read 2026-09-22) — the binary's own platform,
+    #   so the smoke test can run it. Named exactly, not macos-latest, so an image change is a diff.
+    runs-on: macos-26
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        build: ${{ fromJSON(needs.plan.outputs.builds) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.4.0
+      # ⛔ The matrix value reaches the shell through env, never interpolated into the script.
+      - name: Build, check build info, smoke-test, pack
+        env:
+          BUILD: ${{ matrix.build }}
+        run: bun run builds:build "${BUILD}" --out dist
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: build-${{ matrix.build }}
+          path: dist/${{ matrix.build }}/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: publish ${{ matrix.build }}
+    needs: [plan, build]
+    # ⛔ Only main publishes. A pull request (fork or not) never reaches this job.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.plan.outputs.count != '0'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the release
+      id-token: write # sign the attestation (Sigstore, via OIDC)
+      attestations: write # store it
+    strategy:
+      fail-fast: false
+      matrix:
+        build: ${{ fromJSON(needs.plan.outputs.builds) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.4.0
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: build-${{ matrix.build }}
+          path: dist/${{ matrix.build }}
+      - name: Re-verify the files before anything is signed
+        id: dist
+        env:
+          BUILD: ${{ matrix.build }}
+        run: bun run scripts/check-dist.ts "${BUILD}" "dist/${BUILD}"
+      # ★ actions/attest, not attest-build-provenance: since v4 the latter is a wrapper whose
+      #   own release notes say new workflows should use actions/attest. With no predicate
+      #   input it writes the same SLSA build provenance. `subject-checksums` makes EVERY line
+      #   of SHA256SUMS a subject — the archive, the binary and the LICENSE — so a host can
+      #   `gh attestation verify` the extracted binary it actually runs, not just the download.
+      - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-checksums: dist/${{ matrix.build }}/SHA256SUMS
+      - name: Publish (draft, upload, then publish — the immutable-release order)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.dist.outputs.tag }}
+          TITLE: ${{ steps.dist.outputs.title }}
+          ARCHIVE: ${{ steps.dist.outputs.archive }}
+          DIR: dist/${{ matrix.build }}
+        run: |
+          set -euo pipefail
+          # ⛔ A leftover draft for this tag means an earlier publish died half-way. Stop and
+          #   look; never publish beside it.
+          drafts=$(gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" \
+            --jq "[.[] | select(.draft and .tag_name == \"${TAG}\")] | length")
+          if [ "${drafts}" != "0" ]; then
+            echo "a draft release for ${TAG} already exists; delete it by hand after reading it" >&2
+            exit 1
+          fi
+          gh release create "${TAG}" --draft --target "${GITHUB_SHA}" --title "${TITLE}" --latest=false \
+            --notes-file "${DIR}/notes.md" "${DIR}/${ARCHIVE}" "${DIR}/SHA256SUMS"
+          gh release edit "${TAG}" --draft=false --latest=false
+      - name: Verify what was published, as a consumer would
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.dist.outputs.tag }}
+          ARCHIVE: ${{ steps.dist.outputs.archive }}
+        run: |
+          set -euo pipefail
+          mkdir -p fetched && cd fetched
+          gh release download "${TAG}" --repo "${GITHUB_REPOSITORY}"
+          shasum -a 256 --check --ignore-missing SHA256SUMS
+          gh release verify "${TAG}" --repo "${GITHUB_REPOSITORY}"
+          gh release verify-asset "${TAG}" "${ARCHIVE}" --repo "${GITHUB_REPOSITORY}"
+          gh attestation verify "${ARCHIVE}" --repo "${GITHUB_REPOSITORY}"

@@ -1,0 +1,46 @@
+{
+  "name": "homeflare-builds",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Darwin arm64 builds no vendor ships, published as immutable, attested GitHub Releases.",
+  "homepage": "https://github.com/taslabs-net/homeflare-builds#readme",
+  "license": "MIT",
+  "author": "Timothy Schneider",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taslabs-net/homeflare-builds.git"
+  },
+  "type": "module",
+  "scripts": {
+    "lint": "oxfmt --check . && oxlint --deny-warnings .",
+    "lint:fix": "oxfmt . && oxlint --fix .",
+    "types": "tsc --noEmit",
+    "test": "bun test",
+    "check": "bun run lint && bun run types && bun run test",
+    "repo-shape:refresh": "bun run repo-shape.ts",
+    "builds:verify": "bun run scripts/verify.ts",
+    "builds:build": "bun run scripts/build.ts",
+    "caddy:regenerate": "bun run scripts/regenerate-caddy.ts",
+    "catalog": "bun run scripts/catalog.ts",
+    "plan": "env -u npm_execpath -u npm_config_user_agent bun ./node_modules/alchemy/bin/cli.js plan --config alchemy.run.ts --stage live",
+    "deploy": "env -u npm_execpath -u npm_config_user_agent bun ./node_modules/alchemy/bin/cli.js deploy --config alchemy.run.ts --stage live"
+  },
+  "devDependencies": {
+    "@effect/platform-node": "4.0.0-rc.115",
+    "@homeflare/alchemy": "0.19.1",
+    "@homeflare/config": "0.8.0",
+    "@types/bun": "1.4.2",
+    "alchemy": "2.0.0-beta.79",
+    "effect": "4.0.0-rc.115",
+    "oxfmt": "0.68.0",
+    "oxlint": "1.83.0",
+    "typescript": "7.0.2"
+  },
+  "overrides": {
+    "@effect/platform-bun": "4.0.0-rc.115",
+    "@effect/platform-node": "4.0.0-rc.115",
+    "@effect/platform-node-shared": "4.0.0-rc.115",
+    "effect": "4.0.0-rc.115"
+  },
+  "packageManager": "bun@1.4.0"
+}

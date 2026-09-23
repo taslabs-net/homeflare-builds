@@ -1,0 +1,13 @@
+{
+  "extends": ["./node_modules/@homeflare/config/oxlintrc.app.json"],
+  "ignorePatterns": [
+    "dist/**",
+    "coverage/**",
+    "**/generated/**",
+    "**/*.gen.ts",
+    "**/vendor/**",
+    "**/*.openapi.yaml",
+    "**/*.openapi.yml",
+    "**/openapi.json"
+  ]
+}
