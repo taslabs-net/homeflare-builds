@@ -53,6 +53,8 @@ type BuildBase = {
     readonly args: readonly string[];
     /** … and whose stdout must contain each of these. */
     readonly expect: readonly string[];
+    /** Extra environment for that command. ⛔ Placeholders only: this runs in public CI logs. */
+    readonly env?: Readonly<Record<string, string>>;
   };
 };
 

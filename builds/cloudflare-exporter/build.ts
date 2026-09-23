@@ -40,5 +40,14 @@ export const cloudflareExporter: GitBuild = {
     buildvcs: true,
   },
   // There is no --version; cobra's --help exits 0 and lists every flag the launchd jobs pass.
-  smoke: { args: ['--help'], expect: ['--listen', '--scrape_interval'] },
+  // ⚠️ BUT ONLY WITH A CREDENTIAL SET. main() checks for CF_API_TOKEN (or key + email) BEFORE
+  //   cobra parses a flag, and exits 1 with "Please provide CF_API_KEY+CF_API_EMAIL or
+  //   CF_API_TOKEN" otherwise — the first release run failed on exactly that. Building the
+  //   client makes no request, and --help returns before the exporter runs, so a placeholder
+  //   is enough and nothing reaches Cloudflare.
+  smoke: {
+    args: ['--help'],
+    env: { CF_API_TOKEN: 'placeholder-for-the-help-text' },
+    expect: ['--listen', '--scrape_interval'],
+  },
 };

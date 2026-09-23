@@ -35,7 +35,9 @@ export const smoke = async (build: Build, binary: string, root: string): Promise
   if (process.platform !== 'darwin' || process.arch !== 'arm64') {
     throw new Error('smoke: runs only on darwin/arm64, where the binary can execute');
   }
-  const { stdout } = await run([binary, ...build.smoke.args]);
+  const { stdout } = await run([binary, ...build.smoke.args], {
+    env: { ...process.env, ...build.smoke.env },
+  });
   for (const expected of build.smoke.expect) {
     if (!stdout.includes(expected))
       throw new Error(`smoke: ${build.name} output lacks ${expected}`);

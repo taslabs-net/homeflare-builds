@@ -2,7 +2,7 @@
 
 **Status:** in use · **Verified:** 2026-09-22
 
-Three independent checks, from weakest to strongest. A consumer should do the last two.
+Four independent checks, from weakest to strongest. A host should do 2 and 3; anyone can do 4.
 
 ## 1. The checksum file — integrity
 
@@ -44,6 +44,22 @@ too — the check a host can run on the file it actually executes.
 gh attestation verify ./caddy --repo taslabs-net/homeflare-builds \
   --signer-workflow taslabs-net/homeflare-builds/.github/workflows/release.yml
 ```
+
+## 4. Rebuild it — the build is reproducible
+
+Measured on PR 1 (2026-09-22): the Linux cross-build in the `go builds` job and the native
+macOS build in `release` produced the **same bytes** — `caddy` `2e350f6f…fbe38` and its archive
+`f1f6922c…5c42b` from both runners. Nothing in the build depends on the host: Go with cgo off,
+`-trimpath`, no build ID, no VCS stamp for the generated module, and an archive written byte by
+byte with fixed owner and the source's date. So anyone can check a release without trusting
+this repository's runner at all:
+
+```sh
+bun install && bun run builds:verify   # any Linux or macOS host with bun
+```
+
+It rebuilds every manifest and, for each tag already released, fails unless the published
+`SHA256SUMS` lines come out identical.
 
 ## The binary's own record
 
