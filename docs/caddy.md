@@ -21,16 +21,10 @@ The leading `2.11.4` in `caddy version` is nixpkgs' `-X …CustomVersion=2.11.4`
 own releases do not set it, and neither does this build: `caddy version` prints the module
 version from build info (`v2.11.4 h1:…`).
 
-## The Nix module that builds it
+## The mini's current build
 
-House monorepo, `house/nix/homeflare-config/hosts/macmini/modules/edge.nix`:
-`pkgs.caddy.withPlugins { plugins = [ caddy-l4@v0.1.2, caddy-dns/cloudflare@v0.2.4,
-caddy-jwt@v1.4.0, caddy-security@v1.1.64 ]; }`. Its derivations (`nix derivation show`):
-
-- the source step runs `XCADDY_SKIP_BUILD=1 xcaddy build v2.11.4 --with …` (xcaddy 0.4.6,
-  go 1.26.7, plugins in alphabetical order) and vendors the result;
-- the build step: `-ldflags "-s -w -X …CustomVersion=2.11.4 -buildid="`, tags as above,
-  `GOFLAGS=-mod=vendor -trimpath`, `CGO_ENABLED=1`.
+The mini's running Caddy is still built by its nix-darwin system until the Caddy cutover;
+this repo's `build.ts` is what replaces it.
 
 ## What this build does differently, and why
 
@@ -61,6 +55,6 @@ in two lines only:
 
 ## Why these four plugins
 
-From the comments in edge.nix: layer4 terminates IMAPS; cloudflare DNS answers ACME DNS-01 for
-wildcard certificates; caddy-jwt verifies Cloudflare Access JWTs at the edge; caddy-security
-runs an OIDC relying party for surfaces that cannot log in by themselves.
+layer4 terminates IMAPS; cloudflare DNS answers ACME DNS-01 for wildcard certificates;
+caddy-jwt verifies Cloudflare Access JWTs at the edge; caddy-security runs an OIDC relying
+party for surfaces that cannot log in by themselves.
