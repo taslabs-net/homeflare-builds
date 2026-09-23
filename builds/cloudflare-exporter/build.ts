@@ -14,8 +14,8 @@
  * ⚠️ NO VENDOR BINARY FOR DARWIN/ARM64, OR AT ALL. Releases carry no assets; go-build.yml
  *   targets linux/amd64, darwin/amd64 and linux/arm64 on release creation and attached
  *   nothing to this one. nixpkgs marks the package `platforms.linux` — conservatively, not
- *   because of any Linux-only code: it is pure Go (the house override notes it builds and
- *   runs on aarch64-darwin, 125 series against the live API). It needs no darwin patch.
+ *   because of any Linux-only code: it is pure Go, and the mini's own running store build
+ *   above is the proof it builds and runs on aarch64-darwin. It needs no darwin patch.
  */
 import type { GitBuild } from '../types.ts';
 

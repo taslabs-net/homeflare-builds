@@ -37,10 +37,9 @@ calls the thing it runs) and pins the **commit**, which is what actually decides
 
 nixpkgs' `pkgs/by-name/pr/prometheus-cloudflare-exporter/package.nix` sets
 `platforms = lib.platforms.linux`. Nothing in the source is Linux-specific: it is a pure-Go
-cobra/viper program with no cgo and no build tags. The house override
-(`hosts/macmini/modules/obs.nix`, `cloudflareExporter`) widens it to `platforms.unix` and
-notes it builds and runs on aarch64-darwin (125 series against the live API). **No darwin patch
-is needed** — only a build, because upstream ships no binary for any platform:
+cobra/viper program with no cgo and no build tags, and the running binary measured above —
+the mini's own aarch64-darwin build, serving live jobs today — is the proof. **No darwin
+patch is needed** — only a build, because upstream ships no binary for any platform:
 
 - the releases carry no assets (checked for every tag);
 - `.github/workflows/go-build.yml` would cross-build linux/amd64, darwin/amd64 and linux/arm64
