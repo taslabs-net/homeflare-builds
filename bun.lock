@@ -6,7 +6,7 @@
       "name": "homeflare-builds",
       "devDependencies": {
         "@effect/platform-node": "4.0.0-rc.115",
-        "@homeflare/alchemy": "0.31.1",
+        "@homeflare/alchemy": "0.31.2",
         "@homeflare/config": "0.12.1",
         "@types/bun": "1.4.2",
         "alchemy": "2.0.0-beta.79",
@@ -106,7 +106,7 @@
 
     "@distilled.cloud/google-workspace": ["@distilled.cloud/google-workspace@1.0.0-rc.12", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": ">=4.0.0-rc.115 || >=4.0.0" } }, "sha512-xvuqFcIIpCpj6LOKcaiuuY6Bg4M+tBoqwZApHmnTad2KHCY3jXliOPt65kDdyBlICxnoePiZKQUOnafrwzvZUQ=="],
 
-    "@distilled.cloud/grafana": ["@distilled.cloud/grafana@1.0.0-rc.12", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": ">=4.0.0-rc.115 || >=4.0.0" } }, "sha512-/K9hDz+Ri779NAQ3yLQQjJOXccSJ5SUWy8eKrPC4yEQVeBXgKBO+UTrsoiKrl7ldj8ynIaMCf7kWVtm0MclsTQ=="],
+    "@distilled.cloud/grafana": ["@homeflare/distilled-grafana@0.2.0", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-A0gGAI6+qcnXEgppWv8CNeD1fwTr6hMrA3CL2Re0Zv2aBSpuVoNotJZgOdNQNhXATUjd21/drnODReaSZa54cA=="],
 
     "@distilled.cloud/hetzner": ["@distilled.cloud/hetzner@1.0.0-rc.12", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": ">=4.0.0-rc.115 || >=4.0.0" } }, "sha512-G6QzOXTNply63I90IjOtNofs0nHkEd1we/fgXiOjobLZt4+sKjjNBVTAHYHGMDeidbtxw270oF9JakgT11Pzww=="],
 
@@ -150,7 +150,7 @@
 
     "@emnapi/runtime": ["@emnapi/runtime@1.11.3", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA=="],
 
-    "@homeflare/alchemy": ["@homeflare/alchemy@0.31.1", "", { "dependencies": { "@distilled.cloud/caddy": "npm:@homeflare/distilled-caddy@0.2.2", "@distilled.cloud/litellm": "npm:@homeflare/distilled-litellm@0.2.0", "@distilled.cloud/netbox": "npm:@homeflare/distilled-netbox@0.3.0", "@distilled.cloud/paperless-ngx": "npm:@homeflare/distilled-paperless-ngx@0.3.0", "@distilled.cloud/proxmox": "npm:@homeflare/distilled-proxmox@0.2.0", "@distilled.cloud/proxmox-backup": "npm:@homeflare/distilled-proxmox-backup@0.2.0" }, "peerDependencies": { "@distilled.cloud/cloudflare": "1.0.0-rc.12", "@distilled.cloud/discord": "1.0.0-rc.12", "@distilled.cloud/forgejo": "1.0.0-rc.12", "@distilled.cloud/google-workspace": "1.0.0-rc.12", "@distilled.cloud/grafana": "1.0.0-rc.12", "@effect/platform-node": "4.0.0-rc.115", "@effect/sql-pg": "4.0.0-rc.115", "alchemy": "2.0.0-beta.79", "effect": "4.0.0-rc.115", "mime": "4.1.0" }, "bin": { "hf-adopt-verify": "dist/verify/cli.js" } }, "sha512-aozYfP22NkL3c7f1mjLUf6TobzO7us9R8PfwgVX0QEd/ZaWk+vZoG4X+1jUJ8jeYksyUy9y1xkh4Ww06kNTzKA=="],
+    "@homeflare/alchemy": ["@homeflare/alchemy@0.31.2", "", { "dependencies": { "@distilled.cloud/caddy": "npm:@homeflare/distilled-caddy@0.2.2", "@distilled.cloud/grafana": "npm:@homeflare/distilled-grafana@0.2.0", "@distilled.cloud/litellm": "npm:@homeflare/distilled-litellm@0.2.0", "@distilled.cloud/netbox": "npm:@homeflare/distilled-netbox@0.3.0", "@distilled.cloud/paperless-ngx": "npm:@homeflare/distilled-paperless-ngx@0.3.0", "@distilled.cloud/proxmox": "npm:@homeflare/distilled-proxmox@0.2.0", "@distilled.cloud/proxmox-backup": "npm:@homeflare/distilled-proxmox-backup@0.2.0" }, "peerDependencies": { "@distilled.cloud/cloudflare": "1.0.0-rc.12", "@distilled.cloud/discord": "1.0.0-rc.12", "@distilled.cloud/forgejo": "1.0.0-rc.12", "@distilled.cloud/google-workspace": "1.0.0-rc.12", "@effect/platform-node": "4.0.0-rc.115", "@effect/sql-pg": "4.0.0-rc.115", "alchemy": "2.0.0-beta.79", "effect": "4.0.0-rc.115", "mime": "4.1.0" }, "bin": { "hf-adopt-verify": "dist/verify/cli.js" } }, "sha512-FKINLtXsCxdfJvXR3WxeANEX4KWyTMsjLu/DsHUEs0qAKzPksHust31lRCOylfSc2XeW9LJiKUSg+yvKZvchVw=="],
 
     "@homeflare/config": ["@homeflare/config@0.12.1", "", {}, "sha512-Bw4XVjR30cAVNiYbD3g5UWjLT+7+e4prTRJm60VPv4PYgaftKXCj4hK3PY+YuuUNXT2H41rhu26dXm39fs67cA=="],
 
