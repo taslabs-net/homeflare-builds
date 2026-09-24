@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@effect/platform-node": "4.0.0-rc.115",
-    "@homeflare/alchemy": "0.32.0",
+    "@homeflare/alchemy": "0.33.0",
     "@homeflare/config": "0.12.1",
     "@types/bun": "1.4.2",
     "alchemy": "2.0.0-beta.79",
