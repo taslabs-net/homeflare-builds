@@ -17,12 +17,14 @@
  *   (`first_time_contributors`, the kit's), default GITHUB_TOKEN permissions (`read`), and the
  *   squash commit title/message (PR title / PR body). A deploy neither sets nor resets them.
  * ★ STATE IS `Cloudflare.state()` — the account Durable Object every HomeFlare stack uses.
+ * ★ PROVIDERS ARE `repoPolicyProviders()`, NOT `GitHub.providers()`: the ruleset's own provider
+ *   needs GitHub credentials threaded in, which merging the two side by side does not do
+ *   (kit 0.30.0, measured on this repo's bump PR 6). It includes `GitHub.providers()` itself.
  */
-import { declareRepoPolicy } from '@homeflare/alchemy/github';
+import { declareRepoPolicy, repoPolicyProviders } from '@homeflare/alchemy/github';
 import { renderRepoShape } from '@homeflare/config/repo-shape';
 import * as Alchemy from 'alchemy';
 import * as Cloudflare from 'alchemy/Cloudflare';
-import * as GitHub from 'alchemy/GitHub';
 import * as Effect from 'effect/Effect';
 import * as Layer from 'effect/Layer';
 import { shape } from './repo-shape.ts';
@@ -31,7 +33,7 @@ import { shape } from './repo-shape.ts';
 export default Alchemy.Stack(
   'HomeFlareBuilds',
   {
-    providers: Layer.mergeAll(Cloudflare.providers(), GitHub.providers()),
+    providers: Layer.mergeAll(Cloudflare.providers(), repoPolicyProviders()),
     state: Cloudflare.state(),
   },
   Effect.gen(function* () {
