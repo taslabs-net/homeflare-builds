@@ -6,7 +6,7 @@
       "name": "homeflare-builds",
       "devDependencies": {
         "@effect/platform-node": "4.0.0-rc.115",
-        "@homeflare/alchemy": "0.37.5",
+        "@homeflare/alchemy": "0.37.7",
         "@homeflare/config": "0.12.1",
         "@types/bun": "1.4.2",
         "alchemy": "2.0.0-beta.79",
@@ -118,6 +118,8 @@
 
     "@distilled.cloud/netbox": ["@homeflare/distilled-netbox@0.3.0", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-ocWnAzuYGvFTq53aD6c5qrwhDuTv0AfBqtGBSkOeVIvpO4qVicHQqaf3OhmecAnfP36UKcWqEE1O/+uMV0DjIQ=="],
 
+    "@distilled.cloud/openbao": ["@homeflare/distilled-openbao@0.2.2", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-Co2o481kbcAnGW/htJBPRnG+/PqIdwQDrj8C5JWF9eVidzLQGacJWF0zkM48zmidaZMVr6weIfELGjTAIpZnOQ=="],
+
     "@distilled.cloud/opnsense": ["@homeflare/distilled-opnsense@0.2.0", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-NQpBRWuL+L+6PdrIQeq/6cOh+Y/Lf7ff/imtms6ADL/k2C5Xsjh58uCBQmuImLs7a7KyiO3wxMbierfCRLkt7w=="],
 
     "@distilled.cloud/paperless-ngx": ["@homeflare/distilled-paperless-ngx@0.3.0", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-+ZO7dJrTCIYciFeLQuN7jblt2u4vRuG5iurDQHE52KGEHomxO5d4XeB9NHjeE+vVEGidaUYj63YUOsbY3wM79Q=="],
@@ -126,7 +128,7 @@
 
     "@distilled.cloud/prisma": ["@distilled.cloud/prisma@1.0.0-rc.12", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": ">=4.0.0-rc.115 || >=4.0.0" } }, "sha512-Z1KyUrhxkUt0KdxmNUd29Dtl9NizKv7HFHUuTcA1j6Ar5apUMvlR0f4lKqpliXW8Om3oVS3Wgvm+gDsxul2Ojg=="],
 
-    "@distilled.cloud/proxmox": ["@homeflare/distilled-proxmox@0.3.1", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-XMRjp3iXKKLgdTjk/xYQbMCra3W/CF8QxBdln3P2GTiYVipCCrt8axYF91Y5ptCZXufKYk0d1q5od1FpUlyK9g=="],
+    "@distilled.cloud/proxmox": ["@homeflare/distilled-proxmox@0.3.3", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-xS25DVgaeJZ8UoU7dym1kjHuwVwaZ9TQ8WUFYgpDyrpvEpxNmTmNif5TJE/9Csw3x+sgMV7i4vVOt49MYtm+qA=="],
 
     "@distilled.cloud/proxmox-backup": ["@homeflare/distilled-proxmox-backup@0.3.1", "", { "dependencies": { "@distilled.cloud/core": "1.0.0-rc.12" }, "peerDependencies": { "effect": "4.0.0-rc.115" } }, "sha512-tplmodWowUUoPqQf18Sbhgo7NSxd57tnsRWp+KhcnDFTjlG5WtUgAmc7CY5Sw9SVXAl7xA6xhRnOpqCSrE8w9A=="],
 
@@ -156,7 +158,7 @@
 
     "@emnapi/runtime": ["@emnapi/runtime@1.11.3", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA=="],
 
-    "@homeflare/alchemy": ["@homeflare/alchemy@0.37.5", "", { "dependencies": { "@distilled.cloud/caddy": "npm:@homeflare/distilled-caddy@0.2.2", "@distilled.cloud/grafana": "npm:@homeflare/distilled-grafana@0.2.0", "@distilled.cloud/litellm": "npm:@homeflare/distilled-litellm@0.2.0", "@distilled.cloud/netbox": "npm:@homeflare/distilled-netbox@0.3.0", "@distilled.cloud/opnsense": "npm:@homeflare/distilled-opnsense@0.2.0", "@distilled.cloud/paperless-ngx": "npm:@homeflare/distilled-paperless-ngx@0.3.0", "@distilled.cloud/proxmox": "npm:@homeflare/distilled-proxmox@0.3.1", "@distilled.cloud/proxmox-backup": "npm:@homeflare/distilled-proxmox-backup@0.3.1", "@distilled.cloud/unifi-network": "npm:@homeflare/distilled-unifi-network@0.2.0" }, "peerDependencies": { "@distilled.cloud/argocd": "1.0.0-rc.12", "@distilled.cloud/cloudflare": "1.0.0-rc.12", "@distilled.cloud/discord": "1.0.0-rc.12", "@distilled.cloud/forgejo": "1.0.0-rc.12", "@distilled.cloud/google-workspace": "1.0.0-rc.12", "@effect/platform-node": "4.0.0-rc.115", "@effect/sql-pg": "4.0.0-rc.115", "alchemy": "2.0.0-beta.79", "effect": "4.0.0-rc.115", "mime": "4.1.0" }, "bin": { "hf-adopt-verify": "dist/verify/cli.js" } }, "sha512-2W7z2HupYSZkN/pHt3B140kCS2QZGv0fTUZT9qYIsJU29nR6SD4QuW7sd639T00WAOqnUwzpjJdh/24GiJHtSA=="],
+    "@homeflare/alchemy": ["@homeflare/alchemy@0.37.7", "", { "dependencies": { "@distilled.cloud/caddy": "npm:@homeflare/distilled-caddy@0.2.2", "@distilled.cloud/grafana": "npm:@homeflare/distilled-grafana@0.2.0", "@distilled.cloud/litellm": "npm:@homeflare/distilled-litellm@0.2.0", "@distilled.cloud/netbox": "npm:@homeflare/distilled-netbox@0.3.0", "@distilled.cloud/openbao": "npm:@homeflare/distilled-openbao@0.2.2", "@distilled.cloud/opnsense": "npm:@homeflare/distilled-opnsense@0.2.0", "@distilled.cloud/paperless-ngx": "npm:@homeflare/distilled-paperless-ngx@0.3.0", "@distilled.cloud/proxmox": "npm:@homeflare/distilled-proxmox@0.3.3", "@distilled.cloud/proxmox-backup": "npm:@homeflare/distilled-proxmox-backup@0.3.1", "@distilled.cloud/unifi-network": "npm:@homeflare/distilled-unifi-network@0.2.0" }, "peerDependencies": { "@distilled.cloud/argocd": "1.0.0-rc.12", "@distilled.cloud/cloudflare": "1.0.0-rc.12", "@distilled.cloud/discord": "1.0.0-rc.12", "@distilled.cloud/forgejo": "1.0.0-rc.12", "@distilled.cloud/google-workspace": "1.0.0-rc.12", "@effect/platform-node": "4.0.0-rc.115", "@effect/sql-pg": "4.0.0-rc.115", "alchemy": "2.0.0-beta.79", "effect": "4.0.0-rc.115", "mime": "4.1.0" }, "bin": { "hf-adopt-verify": "dist/verify/cli.js" } }, "sha512-8k4CN80gDM4PtdvVCagldVk6BMVd50MkmhzOfINKjiD9Qo+7vcQJNQBps/H/OaDV2Y3SE9Wour7iKwWqbGRIYw=="],
 
     "@homeflare/config": ["@homeflare/config@0.12.1", "", {}, "sha512-Bw4XVjR30cAVNiYbD3g5UWjLT+7+e4prTRJm60VPv4PYgaftKXCj4hK3PY+YuuUNXT2H41rhu26dXm39fs67cA=="],
 
