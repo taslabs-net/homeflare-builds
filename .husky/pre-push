@@ -2,14 +2,18 @@
 # and the same bytes are installed as .husky/pre-commit and .husky/pre-push — the hook
 # name comes from $0, and git's arguments and stdin pass straight through.
 #
-# ⚠️ A hook is a local convenience, not a gate: it is skippable with --no-verify, and a
-#   worktree runs it only once `bun install` has run there. The required checks on main
-#   stay the gate.
+# ⛔ It fails closed. A worktree can run this hook only once `bun install` has run there;
+#   until then the runner is missing, and the commit or push stops with the fix. CI still
+#   runs the whole gate on every pull request.
 #
 # Regenerate this file with: bun node_modules/@homeflare/config/bin/hooks.ts install
 hook="node_modules/@homeflare/config/bin/hooks.ts"
+if ! command -v bun >/dev/null 2>&1; then
+  echo "homeflare hooks: bun is not on PATH — install bun (https://bun.sh), then run 'bun install' in this worktree" >&2
+  exit 1
+fi
 if [ ! -f "$hook" ]; then
-  echo "homeflare hooks: $hook is missing — run 'bun install' in this worktree; skipping" >&2
-  exit 0
+  echo "homeflare hooks: $hook is missing — run 'bun install' in this worktree" >&2
+  exit 1
 fi
 exec bun "$hook" "$(basename "$0")" "$@"
