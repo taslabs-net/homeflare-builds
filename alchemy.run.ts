@@ -8,7 +8,8 @@
  *   from the policy. homeflare-builds is the first repository to use both halves.
  * ⛔ DEPLOY IS TIM'S. `bun run plan` first; `bun run deploy` uses `--stage live` (the CLI
  *   default `live_$USER` would fork a per-laptop copy on the shared Cloudflare state store).
- * ⛔ THE RULESET CANNOT BE ADOPTED (kit's repo-policy.ts, read out of alchemy beta.79): with no
+ * ⛔ THE RULESET CANNOT BE ADOPTED (kit's repo-policy.ts, read out of alchemy beta.79 and NOT
+ *   re-read since the move to beta.81): with no
  *   prior state its reconcile CREATES, and GitHub allows two rulesets of one name. None was
  *   made by hand here (checked at creation: `gh api repos/taslabs-net/homeflare-builds/rulesets`
  *   → []), so the first deploy creates the only one. Re-check before deploying.
